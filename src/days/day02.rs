@@ -1,20 +1,37 @@
-use std::{collections::HashMap, fs, os::raw};
+use std::{collections::HashMap, fs};
 const FNAME: &str = "./resources/day02/data.txt";
+
+const KNOWN_HANDS: [(&str, &str, i32); 9] = [
+    ("A", "X", 3),
+    ("A", "Y", 6),
+    ("A", "Z", 0),
+    ("B", "X", 0),
+    ("B", "Y", 3),
+    ("B", "Z", 6),
+    ("C", "X", 6),
+    ("C", "Y", 0),
+    ("C", "Z", 3),
+];
+
+fn shape_for_outcome(p1: &str, outcome: &str) -> String {
+    let mut shape: &str = "";
+    let outcome_score = match outcome {
+        "X" => 0,
+        "Y" => 3,
+        _ => 6,
+    };
+    for h in KNOWN_HANDS.iter() {
+        if h.0 == p1 && h.2 == outcome_score {
+            shape = h.1;
+        }
+    }
+    shape.to_owned()
+}
 
 fn hand_score(p1: &str, p2: &str) -> i32 {
     let mut result = 0;
-    let known_hands = vec![
-        ("A", "X", 3),
-        ("A", "Y", 6),
-        ("A", "Z", 0),
-        ("B", "X", 0),
-        ("B", "Y", 3),
-        ("B", "Z", 6),
-        ("C", "X", 6),
-        ("C", "Y", 0),
-        ("C", "Z", 3),
-    ];
-    for h in known_hands.iter() {
+
+    for h in KNOWN_HANDS.iter() {
         if h.0 == p1 && h.1 == p2 {
             result = h.2;
         }
@@ -41,9 +58,27 @@ pub fn day02_part1() {
     let lines = raw_data.split('\n');
     for ln in lines {
         let els: Vec<&str> = ln.split(" ").collect();
-        if (els.len() == 2) {
+        if els.len() == 2 {
             let p1 = els.iter().nth(0).unwrap();
             let p2 = els.iter().nth(1).unwrap();
+            scores.push(calc_score(p1, &p2));
+        }
+    }
+
+    let score_sum: i32 = scores.iter().sum();
+    println!("result: {}", score_sum);
+}
+
+pub fn day02_part2() {
+    let mut scores: Vec<i32> = Vec::new();
+    let raw_data = read_data(FNAME);
+    let lines = raw_data.split('\n');
+    for ln in lines {
+        let els: Vec<&str> = ln.split(" ").collect();
+        if els.len() == 2 {
+            let p1 = els.iter().nth(0).unwrap();
+            let outcome = els.iter().nth(1).unwrap();
+            let p2: &str = &shape_for_outcome(p1, outcome)[..];
             scores.push(calc_score(p1, p2));
         }
     }
