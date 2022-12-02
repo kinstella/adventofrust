@@ -38,10 +38,8 @@ fn read_data(fpath: &str) -> String {
 pub fn day02_part1() {
     let mut scores: Vec<i32> = Vec::new();
     let raw_data = read_data(FNAME);
-    println!("rawdata:{}", raw_data);
     let lines = raw_data.split('\n');
     for ln in lines {
-        println!("ln:{}", ln);
         let els: Vec<&str> = ln.split(" ").collect();
         if (els.len() == 2) {
             let p1 = els.iter().nth(0).unwrap();
