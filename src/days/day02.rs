@@ -52,8 +52,9 @@ fn read_data(fpath: &str) -> String {
     fs::read_to_string(fpath).expect("Could not read input file")
 }
 
-pub fn day02_part1() {
-    let mut scores: Vec<i32> = Vec::new();
+pub fn day02() {
+    let mut scores_pt1: Vec<i32> = Vec::new();
+    let mut scores_pt2: Vec<i32> = Vec::new();
     let raw_data = read_data(FNAME);
     let lines = raw_data.split('\n');
     for ln in lines {
@@ -61,28 +62,14 @@ pub fn day02_part1() {
         if els.len() == 2 {
             let p1 = els.iter().nth(0).unwrap();
             let p2 = els.iter().nth(1).unwrap();
-            scores.push(calc_score(p1, &p2));
+            scores_pt1.push(calc_score(p1, &p2));
+            // for part 2, figure out the shape, then the score
+            let shape_used: &str = &shape_for_outcome(p1, p2)[..];
+            scores_pt2.push(calc_score(p1, shape_used));
         }
     }
-
-    let score_sum: i32 = scores.iter().sum();
-    println!("result: {}", score_sum);
-}
-
-pub fn day02_part2() {
-    let mut scores: Vec<i32> = Vec::new();
-    let raw_data = read_data(FNAME);
-    let lines = raw_data.split('\n');
-    for ln in lines {
-        let els: Vec<&str> = ln.split(" ").collect();
-        if els.len() == 2 {
-            let p1 = els.iter().nth(0).unwrap();
-            let outcome = els.iter().nth(1).unwrap();
-            let p2: &str = &shape_for_outcome(p1, outcome)[..];
-            scores.push(calc_score(p1, p2));
-        }
-    }
-
-    let score_sum: i32 = scores.iter().sum();
-    println!("result: {}", score_sum);
+    let score_sum_pt1: i32 = scores_pt1.iter().sum();
+    let score_sum_pt2: i32 = scores_pt2.iter().sum();
+    println!("Part 1 result: {}", score_sum_pt1);
+    println!("Part 2 result: {}", score_sum_pt2);
 }
