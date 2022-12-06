@@ -51,13 +51,13 @@ pub fn process_ops(mut stacks: Vec<Vec<String>>, op: &str, model: u32) -> Vec<Ve
         let (opct, opfrom, opto) = (op_nums[0], op_nums[1] - 1, op_nums[2] - 1);
 
         if model == 9000 {
-            for i in 0..opct {
+            for _i in 0..opct {
                 let p = stacks[opfrom as usize].pop().unwrap();
                 stacks[opto as usize].push(p);
             }
         } else {
             let stacklen = stacks[opfrom as usize].len();
-            let mut remstack = stacks[opfrom as usize][0..stacklen - opct as usize].to_vec();
+            let remstack = stacks[opfrom as usize][0..stacklen - opct as usize].to_vec();
             let mvstack = stacks[opfrom as usize][stacklen - opct as usize..].to_vec();
             for c in mvstack.iter() {
                 stacks[opto as usize].push(c.to_string());
@@ -66,12 +66,6 @@ pub fn process_ops(mut stacks: Vec<Vec<String>>, op: &str, model: u32) -> Vec<Ve
         }
     }
     stacks
-}
-
-pub fn print_stacks(stacks: &Vec<Vec<String>>) {
-    for i in stacks {
-        println!("{:?}", i);
-    }
 }
 
 pub fn part1() {
